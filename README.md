@@ -2,6 +2,11 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Description
+
+This app calculates the five specific prayer times based on geographical location for the worshippers who pray 5 times a day daily
+
+
 ## Available Scripts
 
 In the project directory, you can run:
