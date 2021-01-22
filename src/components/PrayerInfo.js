@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import Switch from '@material-ui/core/Switch';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -36,27 +37,38 @@ const createData = (prayer, time) => {
 const useStyles = makeStyles({
   table: {
     minWidth: 200
-  },
+  }
 });
 
-const PrayerInfo = ({ contact, city, cityState, country }) => {
+const PrayerInfo = ({ prayer, city, cityState, country, toggle, setToggle }) => {
   const classes = useStyles();
 
   const rows = [
-    createData('Dawn', contact.Dawn),
-    createData('Sunrise', contact.Sunrise),
-    createData('Noon', contact.Noon),
-    createData('Afternoon', contact.Afternoon),
-    createData('Sunset', contact.Sunset),
-    createData('Night', contact.Night),
+    createData('Dawn', prayer.Dawn),
+    createData('Sunrise', prayer.Sunrise),
+    createData('Noon', prayer.Noon),
+    createData('Afternoon', prayer.Afternoon),
+    createData('Sunset', prayer.Sunset),
+    createData('Night', prayer.Night),
   ];
+
+  const handleChange = (event) => {
+    setToggle({ ...toggle, [event.target.name]: event.target.checked });
+  };
   
   return (
     <div>
       <Typography component={'span'}>
         <strong>
-          {`Location: ${city}, ${cityState} ${country}`}
+          {`${city}, ${cityState}, ${country}`}
         </strong>
+      <Switch
+        checked={toggle.checked}
+        onChange={handleChange}
+        color="primary"
+        name="checked"
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+      />
       </Typography>
 
       <TableContainer component={Paper}>

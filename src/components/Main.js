@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   leadContainer: {
     width: '100%',
+    height: '100%',
     minWidth: 250,
     paddingTop: 25,
     opacity: 0.6,
@@ -60,7 +61,7 @@ const Main = () => {
   // These states are grouped together and will be used for reference
   // Since data isn't mutated, but pulled from API it doesn't need to be
   // declared individually
-  const [contact, setContact] = useState({
+  const [prayer, setPrayer] = useState({
     Dawn: '0:00',
     Sunrise: '0:00',
     Noon: '0:00',
@@ -74,6 +75,7 @@ const Main = () => {
   const [city, setCity] = useState('San Jose');
   const [cityState, setCityState] = useState('CA');
   const [country, setCountry] = useState('United States');
+  const [toggle, setToggle] = useState({ checked: false });
   
   return (
     <Container className={styles.leadContainer}>
@@ -84,20 +86,21 @@ const Main = () => {
               {/* Location Info Component */}
               <section>
                 <LocInfo
-                  setContact={setContact}
+                  toggle={toggle}
                   city={city}
                   cityState={cityState}
                   country={country}
                   setCity={setCity}
                   setCityState={setCityState}
                   setCountry={setCountry}
+                  setPrayer={setPrayer}
                 />
               </section>
               {/* An extra section for whatever is needed */}
               <Paper className={styles.innerPaper} elevation={0}>
                 <aside>
                   <Typography>
-                    Pro-tip: Your browser caches your input the first time. There is no need for re-input. You're welcome.
+                    GOD-willing: Future update will include geolcation to fetch prayer times based on tracked location
                   </Typography>
                 </aside>
               </Paper>
@@ -108,10 +111,12 @@ const Main = () => {
               {/* Prayer Info Component */}
               <section>
                 <PrayerInfo
-                  contact={contact}
+                  prayer={prayer}
                   city={city}
                   cityState={cityState}
                   country={country}
+                  toggle={toggle}
+                  setToggle={setToggle}
                 />
               </section>
             </Paper>
