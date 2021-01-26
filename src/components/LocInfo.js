@@ -102,7 +102,7 @@ const LocInfo = ({ setPrayer, city, cityState, country, setCity, setCityState, s
     // console.log('Data (toggled): ', data.data.timings);
     return setData(data);
   }, [debouncedCity, debouncedState, debouncedCountry, setData, toggle]);
-
+  
   
   useEffect(() => {
     if (debouncedCity || debouncedState || debouncedCountry) {
