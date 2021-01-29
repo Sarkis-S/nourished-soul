@@ -3,7 +3,9 @@ import { useState, useEffect, useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import globe from '../images/globe.gif';
+// Helper functions
 import useDebounce from '../helpers/debounce';
+import timeConverter from '../helpers/timeConverter';
 
 const myStyles = {
   globe: {
@@ -12,7 +14,9 @@ const myStyles = {
   }
 }
 
-const LocInfo = ({ setPrayer, city, cityState, country, setCity, setCityState, setCountry, toggle }) => {
+const LocInfo = ({
+  setPrayer, toggle, city, cityState, country,
+  setCity, setCityState, setCountry }) => {
   const [date, setDate] = useState({
     day: 'Day',
     month: 'Month ',
@@ -28,32 +32,6 @@ const LocInfo = ({ setPrayer, city, cityState, country, setCity, setCityState, s
   const debouncedCity = useDebounce(city, 700);
   const debouncedState = useDebounce(cityState, 700);
   const debouncedCountry = useDebounce(country, 700);
-
-  // Helper function from 24 to 12 hour conversion
-  const timeConverter = (data) => {
-    let newData = data;
-  
-    for (let key in newData) {
-      let subString1 = parseInt(newData[key].substring(0, 2));
-      let subString2 = newData[key].substring(3, 5);
-      // Falls between (0:00 / midnight to 0:59), add 12 hours and AM
-      if (subString1 === 0) {
-        subString1 += 12;
-        newData[key] = `${subString1}:${subString2} am`;
-      // From (1:00 to 11:59), simply add AM
-      } else if (subString1 >= 1 && subString1 <= 11) {
-        newData[key] = `${subString1}:${subString2} am`;
-      // If it's noon, simplay add PM
-      } else if (subString1 === 12) {
-        newData[key] = `${subString1}:${subString2} pm`;
-      // For times between (13:00 to 23:59), subtract 12 hours and add PM
-      } else if (subString1 >= 13 && subString1 <= 23) {
-        subString1 -= 12;
-        newData[key] = `${subString1}:${subString2} pm`;
-      }
-    }
-    return newData;
-  }
 
   // setState handler for received prayer data
   const setData = useCallback((data) => {
@@ -77,7 +55,9 @@ const LocInfo = ({ setPrayer, city, cityState, country, setCity, setCityState, s
     });
   },[setPrayer]);
 
-  // Fetches prayer data then sets new data to state
+  /**************************************************
+   * Fetches prayer data then sets new data to state
+   **************************************************/
   const getData = useCallback(async () => {
     // PrayerTimes API - https://aladhan.com/v1 | Endpoint - /timingsByCity
     // Tune=Imsak,Fajr,Sunrise,Dhuhr,Asr,Maghrib,Sunset,Isha,Midnight
@@ -87,30 +67,81 @@ const LocInfo = ({ setPrayer, city, cityState, country, setCity, setCityState, s
 
     const response = await fetch (URL);
     if (!response.ok) {
-      const message = `An error has occurred. Status code: ${response.status}, Is that location forealz? Check your sources friend!`;
+      const message = `An error has occurred. Status code: ${response.status}, Location unrecognized.`;
       console.log(message);
       return null;
     }
     const data = await response.json();
-    // Fires when the toggle is left off (default)
+    // Fires when toggle is off (default)
     if (toggle.checked === false) {
       const prayers = data.data.timings;
       data.data.timings = timeConverter(prayers);
-      // console.log('Data: ', data.data.timings);
       return setData(data);
     }
-    // console.log('Data (toggled): ', data.data.timings);
     return setData(data);
   }, [debouncedCity, debouncedState, debouncedCountry, setData, toggle]);
+
+
+  /********************************************
+   * Initial prayer fetch based on geolocation
+   ********************************************/
+  const getGeoTimes = useCallback(async (latitude, longitude) => {
+    // return all prayer times on specific date with latitude and longitude
+    const URL = `http://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=99&methodSettings=18,null,18&tune=0,0,0,1,1,1,0,0,0`;
+
+    const response = await fetch (URL);
+    if (!response.ok) {
+      const message = `An error has occurred. Status code: ${response.status}, There is an issue with location services`;
+      console.log(message);
+      return null;
+    }
+    const data = await response.json();
+    // Fires when toggle is off (default)
+    if (toggle.checked === false) {
+      const prayers = data.data.timings;
+      data.data.timings = timeConverter(prayers);
+      return setData(data);
+    }
+    return setData(data);
+  }, [setData, toggle]);
+
+
+  const onGeolocateSuccess = useCallback((coordinates) => {
+    const { latitude, longitude } = coordinates.coords;
+    getGeoTimes(latitude, longitude);
+  }, [getGeoTimes]);
+  
+  // prompts user to enable location services with options
+  const onGeolocateError = (error) => {
+    console.warn(error.code, error.message);
+   
+    if (error.code === 1) {
+      // they said no
+      alert('Locaton services needs to be enabled for optimal usage of the app');
+    } else if (error.code === 2) {
+      // position unavailable
+      alert('Location services seems to be unavailable at this time');
+    } else if (error.code === 3) {
+      // timeout
+      alert('Please refresh the page and enable location services');
+    }
+  }
   
   
   useEffect(() => {
-    if (debouncedCity || debouncedState || debouncedCountry) {
+    if (debouncedCity === '' && debouncedState === '' && debouncedCountry === '') {
+      // first checks browser support for geolocation
+      if (window.navigator && window.navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(onGeolocateSuccess, onGeolocateError);
+      }
+    } else if (debouncedCity === '' || debouncedState === '' || debouncedCountry === '') {
+      return null;
+    } else if (debouncedCity || debouncedState || debouncedCountry) {
       let results = getData();
       return results;
     }
-  }, [getData, debouncedCity, debouncedState, debouncedCountry]);
-
+  }, [getData, debouncedCity, debouncedState, debouncedCountry, onGeolocateSuccess]);
+  
 
   return (
     <div>

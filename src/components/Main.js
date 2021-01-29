@@ -69,13 +69,15 @@ const Main = () => {
     Sunset: '0:00',
     Night: '0:00'
   });
+
   // These states are passed to sibling components
   // Ex: city is passed to PrayerInfo.js, while setCity is sent to LocInfo.js
   // The use of 'setCity' will update the 'city' state in LocInfo.js
-  const [city, setCity] = useState('San Jose');
-  const [cityState, setCityState] = useState('CA');
-  const [country, setCountry] = useState('United States');
+  const [city, setCity] = useState('');
+  const [cityState, setCityState] = useState('');
+  const [country, setCountry] = useState('');
   const [toggle, setToggle] = useState({ checked: false });
+
   
   return (
     <Container className={styles.leadContainer}>
@@ -100,7 +102,7 @@ const Main = () => {
               <Paper className={styles.innerPaper} elevation={0}>
                 <aside>
                   <Typography>
-                    GOD-willing: Future update will include geolcation to fetch prayer times based on tracked location
+                    Pro-tip: Prayer time is based on your geographical location. Refresh to update.
                   </Typography>
                 </aside>
               </Paper>

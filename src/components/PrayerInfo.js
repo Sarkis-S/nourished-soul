@@ -60,7 +60,7 @@ const PrayerInfo = ({ prayer, city, cityState, country, toggle, setToggle }) => 
     <div>
       <Typography component={'span'}>
         <strong>
-          {`${city}, ${cityState}, ${country}`}
+          {(city === '' && cityState === '' && country === '') ? 'Geolocated times:' : `${city}, ${cityState}, ${country}`}
         </strong>
       <Switch
         checked={toggle.checked}

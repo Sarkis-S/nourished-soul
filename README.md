@@ -4,10 +4,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # Description
 
-This app calculates the five specific prayer times based on geographical location for the worshippers who pray 5 times a day daily
+This app calculates the five specific prayer times based on geographical location for the worshippers who pray 5 times a day daily.
 App is hosted on Heroku at http://nourished-soul.herokuapp.com/
 
-Note: If the app is slow to launch this is because Heroku sets apps to hibernate
+Note: If the app is slow to launch this is because Heroku sets apps to hibernate.
 This is due to low traffic over a period of time which saves on resources. Give it a minute.
 Read about it here at https://devcenter.heroku.com/articles/free-dyno-hours#dyno-sleeping under "Dyno sleeping."
 
