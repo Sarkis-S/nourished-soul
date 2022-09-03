@@ -15,8 +15,10 @@ Read about it here at https://devcenter.heroku.com/articles/free-dyno-hours#dyno
 
 In the project directory, you can run:
 
+### `yarn install`
 ### `yarn start`
 
+Note: There is an issue with node v17+ use node v16
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
