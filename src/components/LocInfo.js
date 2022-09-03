@@ -117,7 +117,7 @@ const LocInfo = ({
    
     if (error.code === 1) {
       // they said no
-      alert('Locaton services needs to be enabled for optimal usage of the app');
+      alert('Location services needs to be enabled for optimal usage of the app');
     } else if (error.code === 2) {
       // position unavailable
       alert('Location services seems to be unavailable at this time');

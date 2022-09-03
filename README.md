@@ -18,8 +18,7 @@ In the project directory, you can run:
 ### `yarn install`
 ### `yarn start`
 
-Note: There is an issue with node v17+ use node v16
-Runs the app in the development mode.\
+Note: There is an issue with node v17+, use node v16 during development\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
