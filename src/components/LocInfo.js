@@ -62,7 +62,7 @@ const LocInfo = ({
     // PrayerTimes API - https://aladhan.com/v1 | Endpoint - /timingsByCity
     // Tune=Imsak,Fajr,Sunrise,Dhuhr,Asr,Maghrib,Sunset,Isha,Midnight
     // Returns all prayer times for a specific date in a particular city with customization
-    const URL = `http://api.aladhan.com/v1/timingsByCity?city=${debouncedCity}&state=${debouncedState}&country=${debouncedCountry}
+    const URL = `https://api.aladhan.com/v1/timingsByCity?city=${debouncedCity}&state=${debouncedState}&country=${debouncedCountry}
     &method=99&methodSettings=18,null,18&tune=0,0,0,1,1,1,0,0,0`;
 
     const response = await fetch (URL);
@@ -87,7 +87,7 @@ const LocInfo = ({
    ********************************************/
   const getGeoTimes = useCallback(async (latitude, longitude) => {
     // return all prayer times on specific date with latitude and longitude
-    const URL = `http://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=99&methodSettings=18,null,18&tune=0,0,0,1,1,1,0,0,0`;
+    const URL = `https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=99&methodSettings=18,null,18&tune=0,0,0,1,1,1,0,0,0`;
 
     const response = await fetch (URL);
     if (!response.ok) {
