@@ -29,9 +29,15 @@ const LocInfo = ({
     zone: 'None'
   });
 
-  const debouncedCity = useDebounce(city, 700);
-  const debouncedState = useDebounce(cityState, 700);
-  const debouncedCountry = useDebounce(country, 700);
+  const debouncedCity = useDebounce(city, 3000);
+  const debouncedState = useDebounce(cityState, 3000);
+  const debouncedCountry = useDebounce(country, 3000);
+
+  const clearData = useCallback(() => {
+    setCity('');
+    setCityState('');
+    setCountry('');
+  },[setCity, setCityState, setCountry]);
 
   // setState handler for received prayer data
   const setData = useCallback((data) => {
@@ -53,13 +59,14 @@ const LocInfo = ({
       latitude: data.data.meta.latitude,
       zone: data.data.meta.timezone
     });
-  },[setPrayer]);
-
+    clearData();
+  },[setPrayer, clearData]);
+  
   /**************************************************
    * Fetches prayer data then sets new data to state
    **************************************************/
   const getData = useCallback(async () => {
-    // PrayerTimes API - https://aladhan.com/v1 | Endpoint - /timingsByCity
+    // PrayerTimes API - https://aladhan.com/prayer-times-api | Endpoint - /timingsByCity
     // Tune=Imsak,Fajr,Sunrise,Dhuhr,Asr,Maghrib,Sunset,Isha,Midnight
     // Returns all prayer times for a specific date in a particular city with customization
     const URL = `https://api.aladhan.com/v1/timingsByCity?city=${debouncedCity}&state=${debouncedState}&country=${debouncedCountry}
@@ -129,14 +136,16 @@ const LocInfo = ({
   
   
   useEffect(() => {
+    if (debouncedCity || debouncedState || debouncedCountry) {
+      return getData;
+    }
+
     if (debouncedCity === '' && debouncedState === '' && debouncedCountry === '') {
       // first checks browser support for geolocation
       if (window.navigator && window.navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onGeolocateSuccess, onGeolocateError);
       }
-    } else if (debouncedCity || debouncedState || debouncedCountry) {
-      // let results = getData();
-      return getData;
+
     }
   }, [getData, debouncedCity, debouncedState, debouncedCountry, onGeolocateSuccess]);
   
