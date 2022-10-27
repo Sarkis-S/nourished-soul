@@ -145,7 +145,6 @@ const LocInfo = ({
       if (window.navigator && window.navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onGeolocateSuccess, onGeolocateError);
       }
-
     }
   }, [getData, debouncedCity, debouncedState, debouncedCountry, onGeolocateSuccess]);
   
