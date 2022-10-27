@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Typography } from '@material-ui/core';
-// Child components
+
 import NavBar from './NavBar';
 import Footer from './Footer';
 import LocInfo from './LocInfo';
@@ -58,9 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Main = () => {
   const styles = useStyles();
-  // These states are grouped together and will be used for reference
-  // Since data isn't mutated, but pulled from API it doesn't need to be
-  // declared individually
+  
   const [prayer, setPrayer] = useState({
     Dawn: '0:00',
     Sunrise: '0:00',

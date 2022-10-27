@@ -1,4 +1,3 @@
-import React from 'react';
 // Material-UI
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';

@@ -134,11 +134,9 @@ const LocInfo = ({
       if (window.navigator && window.navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onGeolocateSuccess, onGeolocateError);
       }
-    } else if (debouncedCity === '' || debouncedState === '' || debouncedCountry === '') {
-      return null;
     } else if (debouncedCity || debouncedState || debouncedCountry) {
-      let results = getData();
-      return results;
+      // let results = getData();
+      return getData;
     }
   }, [getData, debouncedCity, debouncedState, debouncedCountry, onGeolocateSuccess]);
   
